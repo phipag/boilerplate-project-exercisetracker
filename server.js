@@ -60,7 +60,7 @@ app.post('/api/exercise/add', async (req, res, next) => {
         description: newExercise.description,
         duration: newExercise.duration,
         _id: newExercise._id,
-        date: newExercise.date
+        date: newExercise.date.toDateString()
     });
 });
 app.get('/api/exercise/log', async (req, res, next) => {
