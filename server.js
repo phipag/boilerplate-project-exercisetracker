@@ -43,7 +43,7 @@ app.post('/api/exercise/add', async (req, res, next) => {
     let parsedDate;
     if (!!date) {
         parsedDate = Date.parse(date);
-        if (!parsedDate instanceof Date || isNaN(parsedDate)) return next({ status: 422, message: 'Given Date is invalid' });
+        if (!parsedDate instanceof Date || isNaN(parsedDate)) parsedDate = Date.now();
     }
     // Add Exercise to database
     const newExercise = await new Exercise({
