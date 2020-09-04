@@ -69,12 +69,9 @@ app.get('/api/exercise/log', async (req, res, next) => {
     if (limit && !/^\d+$/.test(limit)) return next({ status: 422, message: 'Limit must be a number' });
     if (from && !/^\d+$/.test(from)) return next({ status: 422, message: 'From must be a number' });
     if (to && !/^\d+$/.test(to)) return next({ status: 422, message: 'To must be a number' });
-    const exercises = await Exercise.find({ userId })
-        .limit(limit)
-        .from(from)
-        .to(to)
+    const exercises = await Exercise.find({ userId }, null, { limit, from, to })
         .exec();
-    return res.status(200).json(exercises);
+    return res.status(200).json({ log: exercises, count: exercises.length });
 });
 
 // Not found middleware
