@@ -53,8 +53,15 @@ app.post('/api/exercise/add', async (req, res, next) => {
         description,
         duration,
         date: parsedDate || undefined
+    }).save();
+    const user = await User.findById(userId);
+    return res.status(201).json({
+        username: user.username,
+        description: newExercise.description,
+        duration: newExercise.duration,
+        _id: newExercise._id,
+        date: newExercise.date
     });
-    return res.status(201).json(newExercise);
 });
 app.get('/api/exercise/log', async (req, res, next) => {
     const { userId, from, to, limit } = req.query;
