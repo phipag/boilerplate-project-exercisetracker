@@ -26,7 +26,7 @@ app.post('/api/exercise/new-user', async (req, res, next) => {
     return res.status(201).json(newUser);
 });
 app.get('/api/exercise/users', async (req, res) => {
-    const users = await User.all().exec();
+    const users = await User.find().exec();
     return res.status(200).json(users);
 });
 app.post('/api/exercise/add', async (req, res, next) => {
