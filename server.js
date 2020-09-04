@@ -67,9 +67,15 @@ app.get('/api/exercise/log', async (req, res, next) => {
     const { userId, from, to, limit } = req.query;
     if (!userId || !mongoose.Types.ObjectId.isValid(userId) || !await User.exists({ _id: userId })) return next({ status: 422, message: 'User ID is a mandatory field' });
     if (limit && !/^\d+$/.test(limit)) return next({ status: 422, message: 'Limit must be a number' });
-    if (from && !/^\d+$/.test(from)) return next({ status: 422, message: 'From must be a number' });
-    if (to && !/^\d+$/.test(to)) return next({ status: 422, message: 'To must be a number' });
-    const exercises = await Exercise.find({ userId }, null, { limit, from, to })
+    let searchObject = { userId };
+    let fromDate, toDate;
+    if (from && to) {
+        fromDate = Date.parse(from);
+        toDate = Date.parse(to);
+        if (!fromDate instanceof Date || isNaN(fromDate) || !toDate instanceof Date || isNaN(toDate)) return next({ status: 422, message: 'From and to must be dates' });
+        searchObject = { ...searchObject, ...{ date: { '$gte': fromDate, '$lte': toDate } } };
+    }
+    const exercises = await Exercise.find(searchObject, null, { limit })
         .exec();
     return res.status(200).json({ log: exercises, count: exercises.length });
 });
