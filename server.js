@@ -25,6 +25,10 @@ app.post('/api/exercise/new-user', async (req, res, next) => {
     const newUser = await new User({ username }).save();
     return res.status(201).json(newUser);
 });
+app.get('/api/exercise/users', async (req, res) => {
+    const users = await User.all().exec();
+    return res.status(200).json(users);
+});
 app.post('/api/exercise/add', async (req, res, next) => {
     const { userId, description, duration, date } = req.body;
     // Joi or express-validator middleware npm packages can help with easier validation
