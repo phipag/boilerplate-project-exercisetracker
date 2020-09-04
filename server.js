@@ -75,7 +75,7 @@ app.get('/api/exercise/log', async (req, res, next) => {
         if (!fromDate instanceof Date || isNaN(fromDate) || !toDate instanceof Date || isNaN(toDate)) return next({ status: 422, message: 'From and to must be dates' });
         searchObject = { ...searchObject, ...{ date: { '$gte': fromDate, '$lte': toDate } } };
     }
-    const exercises = await Exercise.find(searchObject, null, { limit })
+    const exercises = await Exercise.find(searchObject, null, { limit: parseInt(limit, 10) })
         .exec();
     return res.status(200).json({ log: exercises, count: exercises.length });
 });
